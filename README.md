@@ -128,7 +128,7 @@ Aplikasi ini memiliki 3 tabel utama:
 - **`projects`** – Proyek milik pengguna (nama, deskripsi, warna label)
 - **`tasks`** – Tugas dalam proyek (judul, status, prioritas, tenggat waktu)
 
-**Status tugas yang tersedia:** `TODO` | `IN_PROGRESS` | `DONE`
+**Status tugas yang tersedia:** `TO DO` | `IN_PROGRESS` | `DONE`
 
 **Prioritas tugas yang tersedia:** `LOW` | `MEDIUM` | `HIGH`
 
@@ -145,19 +145,6 @@ Aplikasi ini memiliki 3 tabel utama:
 | DB Generate | `npx drizzle-kit generate` | Generate file migrasi baru |
 | DB Migrate | `npx drizzle-kit migrate` | Terapkan migrasi ke database |
 | DB Studio | `npx drizzle-kit studio` | Buka Drizzle Studio (GUI database browser) |
-
----
-
-## 🌐 Deploy ke Vercel
-
-Cara termudah untuk deploy adalah menggunakan [Vercel](https://vercel.com):
-
-1. Push kode ke GitHub/GitLab
-2. Import repository di dashboard Vercel
-3. Tambahkan environment variables (`DATABASE_URL`, `JWT_SECRET`) di pengaturan project Vercel
-4. Klik **Deploy**
-
-Lihat [dokumentasi deployment Next.js](https://nextjs.org/docs/app/building-your-application/deploying) untuk informasi lebih lanjut.
 
 ---
 
