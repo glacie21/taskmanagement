@@ -1,35 +1,80 @@
 # 📋 Task Management App
 
-Aplikasi manajemen tugas berbasis web yang dibangun dengan **Next.js**, **PostgreSQL**, dan **Drizzle ORM**. Aplikasi ini memungkinkan pengguna untuk mengelola proyek dan tugas secara efisien dengan fitur autentikasi, prioritas tugas, dan status progres.
+<p align="center">
+  Aplikasi manajemen proyek dan tugas modern berbasis web full-stack, dirancang untuk memudahkan tracking progres kerja dengan antarmuka yang bersih, responsif, dan performa tinggi.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+  <img src="https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Drizzle_ORM-v0.45-C5F74F?style=for-the-badge&logo=drizzle" alt="Drizzle ORM" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css" alt="Tailwind CSS" />
+</p>
+
+---
+
+## 📑 Daftar Isi
+
+- [Fitur Utama](#-fitur-utama)
+- [Tech Stack](#-tech-stack)
+- [Prasyarat](#-prasyarat)
+- [Panduan Instalasi & Menjalankan](#-panduan-instalasi--menjalankan)
+  - [1. Clone Repository](#1-clone-repository)
+  - [2. Install Dependencies](#2-install-dependencies)
+  - [3. Konfigurasi Environment](#3-konfigurasi-environment)
+  - [4. Siapkan Database PostgreSQL](#4-siapkan-database-postgresql)
+  - [5. Jalankan Migrasi Database](#5-jalankan-migrasi-database)
+  - [6. Jalankan Server](#6-jalankan-server)
+- [Skema & Relasi Database](#-skema--relasi-database)
+- [Drizzle Studio (Database GUI)](#-drizzle-studio-database-gui)
+- [Struktur Direktori](#-struktur-direktori)
+- [Daftar Perintah (Scripts)](#-daftar-perintah-scripts)
+- [Troubleshooting](#-troubleshooting)
+
+---
+
+## ✨ Fitur Utama
+
+- 🔐 **Autentikasi Pengguna**: Sistem pendaftaran dan login aman dengan enkripsi kata sandi (bcrypt) dan session berbasis JWT (`jose`).
+- 📁 **Manajemen Proyek**: Kelola proyek dengan label warna yang dapat disesuaikan untuk membedakan kategori pekerjaan.
+- ✅ **Tracking Tugas Komprehensif**: Tambah, perbarui, dan filter tugas dengan status progres (`TODO`, `IN_PROGRESS`, `DONE`) dan tingkat prioritas (`LOW`, `MEDIUM`, `HIGH`).
+- 📅 **Tenggat Waktu (Due Dates)**: Pantau batas waktu pengerjaan setiap tugas agar tidak terlewat.
+- 📊 **Visualisasi & Statistik**: Integrasi grafik visual (Recharts) untuk melihat ringkasan produktivitas tugas.
+- 🌓 **Tema Gelap & Terang**: Tampilan modern yang nyaman di mata dengan dukungan Dark Mode (`next-themes`).
+- ⚡ **Validasi Aman**: Validasi form end-to-end menggunakan React Hook Form dan skema Zod.
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Teknologi | Keterangan |
-|---|---|
-| [Next.js 16](https://nextjs.org) | Framework React full-stack |
-| [PostgreSQL](https://www.postgresql.org) | Database relasional |
-| [Drizzle ORM](https://orm.drizzle.team) | ORM & query builder untuk TypeScript |
-| [Tailwind CSS v4](https://tailwindcss.com) | Utility-first CSS framework |
-| [React Hook Form](https://react-hook-form.com) | Manajemen form |
-| [Zod](https://zod.dev) | Validasi schema |
-| [Recharts](https://recharts.org) | Visualisasi data / chart |
-| [Lucide React](https://lucide.dev) | Ikon |
+| Kategori | Teknologi | Deskripsi |
+| :--- | :--- | :--- |
+| **Framework** | [Next.js 16](https://nextjs.org) (App Router) | Framework React modern untuk frontend & API backend |
+| **Bahasa** | [TypeScript](https://www.typescriptlang.org/) | Pengetikan statis untuk keandalan kode |
+| **Styling** | [Tailwind CSS v4](https://tailwindcss.com) | Framework CSS berbasis utility |
+| **Database** | [PostgreSQL](https://www.postgresql.org) | Database relasional yang andal dan scalable |
+| **ORM** | [Drizzle ORM](https://orm.drizzle.team) | Type-safe ORM & query builder performa tinggi |
+| **Form & Validasi** | [React Hook Form](https://react-hook-form.com) & [Zod](https://zod.dev) | Pengelolaan input dan validasi data |
+| **Visualisasi** | [Recharts](https://recharts.org) | Komponen grafik interaktif |
+| **Icons & Feedback** | [Lucide React](https://lucide.dev) & [Sonner](https://sonner.emilkowal.ski/) | Set ikon modern dan notifikasi toast |
 
 ---
 
-## ✅ Prasyarat
+## 📋 Prasyarat
 
-Sebelum memulai, pastikan kamu sudah menginstall:
+Sebelum menjalankan project di komputer lokal, pastikan telah menginstal:
 
-- **Node.js** versi 18 atau lebih baru → [Download Node.js](https://nodejs.org)
-- **PostgreSQL** yang sedang berjalan secara lokal atau remote → [Download PostgreSQL](https://www.postgresql.org/download/)
-- **npm**, **yarn**, **pnpm**, atau **bun** (package manager)
+1. **Node.js**: Versi `18.18+` atau `20+` (disarankan) &rarr; [Download Node.js](https://nodejs.org)
+2. **Package Manager**: `npm`, `pnpm`, `yarn`, atau `bun`
+3. **PostgreSQL**: Dapat menggunakan PostgreSQL lokal atau via Docker container
 
 ---
 
-## 🚀 Cara Menjalankan Aplikasi
+## 🚀 Panduan Instalasi & Menjalankan
+
+Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi di lingkungan lokal:
 
 ### 1. Clone Repository
 
@@ -42,125 +87,221 @@ cd taskmanagement
 
 ```bash
 npm install
-# atau
-yarn install
-# atau
-pnpm install
+```
+*(atau gunakan `pnpm install` / `yarn install` / `bun install`)*
+
+### 3. Konfigurasi Environment
+
+Duplikat file template `.env.example` menjadi `.env.local`:
+
+**Linux / macOS:**
+```bash
+cp .env.example .env.local
 ```
 
-### 3. Konfigurasi Environment Variables
+**Windows (PowerShell):**
+```powershell
+copy .env.example .env.local
+```
 
-Buat file `.env.local` di root project, lalu isi variabel berikut:
+Buka file `.env.local` lalu sesuaikan isinya:
 
 ```env
-# URL koneksi ke database PostgreSQL kamu
+# URL koneksi ke PostgreSQL
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/taskflow
 
-# Secret key untuk JWT / session (ganti dengan string acak yang panjang dan aman)
-JWT_SECRET=ganti_dengan_secret_key_yang_panjang_dan_aman
+# Secret key untuk JWT / session (minimal 32 karakter)
+JWT_SECRET=super_secret_jwt_key_silakan_ganti_dengan_string_acak
 ```
 
-> **Tips:** Kamu bisa menggunakan `openssl rand -base64 32` di terminal untuk menghasilkan `JWT_SECRET` yang aman.
-
-> **Penting:** Jangan pernah commit file `.env.local` ke repository. File ini sudah terdaftar di `.gitignore`.
-
-### 4. Setup Database
-
-Pastikan PostgreSQL sudah berjalan dan database `taskflow` sudah dibuat:
-
-```sql
--- Jalankan perintah ini di PostgreSQL client (psql / pgAdmin / DBeaver, dll.)
-CREATE DATABASE taskflow;
-```
-
-Kemudian jalankan migrasi untuk membuat tabel-tabel yang diperlukan:
-
-```bash
-# Generate file migrasi dari schema
-npx drizzle-kit generate
-
-# Terapkan migrasi ke database
-npx drizzle-kit migrate
-```
-
-> **Catatan:** Schema database berada di `src/lib/db/schema.ts`. Tabel yang akan dibuat: `users`, `projects`, dan `tasks`.
-
-### 5. Jalankan Development Server
-
-```bash
-npm run dev
-# atau
-yarn dev
-# atau
-pnpm dev
-```
-
-Buka [http://localhost:3000](http://localhost:3000) di browser kamu. Aplikasi siap digunakan! 🎉
+> 💡 **Tips:** Untuk membuat string acak yang aman untuk `JWT_SECRET`, jalankan:
+> ```bash
+> openssl rand -base64 32
+> ```
 
 ---
 
-## 📂 Struktur Project
+### 4. Siapkan Database PostgreSQL
+
+Pilih salah satu metode yang paling mudah bagi kamu:
+
+#### Opsi A: Menggunakan Docker (Paling Praktis)
+Jika memiliki Docker, kamu bisa menjalankan PostgreSQL secara instan tanpa install database lokal:
+
+```bash
+docker run --name taskflow-pg -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=taskflow -p 5432:5432 -d postgres:16-alpine
+```
+
+#### Opsi B: Menggunakan PostgreSQL Lokal
+Jika menggunakan PostgreSQL lokal (pgAdmin / DBeaver / terminal `psql`):
+
+```sql
+CREATE DATABASE taskflow;
+```
+
+---
+
+### 5. Jalankan Migrasi Database
+
+Sinkronkan skema tabel ke dalam database kamu:
+
+```bash
+# 1. Generate migrasi dari schema (src/lib/db/schema.ts)
+npm run db:generate
+
+# 2. Terapkan migrasi ke database PostgreSQL
+npm run db:migrate
+```
+
+> ⚡ **Alternatif Cepat (Development Push):**
+> Kamu juga bisa langsung menyelaraskan skema tanpa file migrasi menggunakan:
+> ```bash
+> npm run db:push
+> ```
+
+---
+
+### 6. Jalankan Server
+
+Jalankan server Next.js pada mode development:
+
+```bash
+npm run dev
+```
+
+Buka browser dan akses:
+👉 **[http://localhost:3000](http://localhost:3000)**
+
+---
+
+## 🗄️ Skema & Relasi Database
+
+Aplikasi ini menggunakan 3 entitas tabel utama yang saling terhubung:
+
+```
+┌──────────────┐         ┌────────────────┐         ┌──────────────┐
+│    users     │ 1 ──── n│    projects    │ 1 ──── n│    tasks     │
+├──────────────┤         ├────────────────┤         ├──────────────┤
+│ id (PK)      │         │ id (PK)        │         │ id (PK)      │
+│ name         │         │ name           │         │ title        │
+│ email        │         │ description    │         │ description  │
+│ password     │         │ color          │         │ status       │
+│ createdAt    │         │ userId (FK)    │         │ priority     │
+│ updatedAt    │         │ createdAt      │         │ dueDate      │
+└──────────────┘         │ updatedAt      │         │ projectId(FK)│
+                         └────────────────┘         │ userId (FK)  │
+                                                    │ createdAt    │
+                                                    │ updatedAt    │
+                                                    └──────────────┘
+```
+
+- **`users`**: Menyimpan akun pengguna terdaftar.
+- **`projects`**: Mengelompokkan tugas berdasarkan ruang lingkup/proyek milik user (`ON DELETE CASCADE`).
+- **`tasks`**: Menyimpan detail tugas dengan atribut:
+  - **Status**: `TODO` | `IN_PROGRESS` | `DONE`
+  - **Prioritas**: `LOW` | `MEDIUM` | `HIGH`
+  - **Due Date**: Tenggat waktu pengerjaan tugas
+
+---
+
+## 🖥️ Drizzle Studio (Database GUI)
+
+Drizzle menyediakan antarmuka visual berbasis web untuk memeriksa, menambah, mengedit, dan menghapus data database secara langsung:
+
+```bash
+npm run db:studio
+```
+
+Akses GUI database di: **[https://local.drizzle.team](https://local.drizzle.team)**
+
+---
+
+## 📂 Struktur Direktori
 
 ```
 taskmanagement/
 ├── src/
-│   ├── app/                  # Halaman & routing (Next.js App Router)
-│   │   ├── layout.tsx        # Layout utama aplikasi
-│   │   ├── page.tsx          # Halaman utama (/)
-│   │   └── globals.css       # Style global
+│   ├── app/                      # Next.js App Router (Halaman & Layout)
+│   │   ├── layout.tsx            # Root layout & providers
+│   │   ├── page.tsx              # Halaman beranda utama
+│   │   └── globals.css           # Styling global & konfigurasi tema Tailwind
 │   └── lib/
 │       └── db/
-│           ├── schema.ts     # Definisi tabel database (Drizzle)
-│           └── migrations/   # File migrasi database (auto-generated)
-├── drizzle.config.ts         # Konfigurasi Drizzle ORM
-├── next.config.ts            # Konfigurasi Next.js
-├── .env.local                # Environment variables (buat sendiri, jangan di-commit!)
-└── package.json
+│           ├── schema.ts         # Definisi tabel & relasi database (Drizzle)
+│           └── migrations/       # Hasil generate file migrasi SQL
+├── public/                       # Aset statis publik (ikon, gambar)
+├── .env.example                  # Template konfigurasi environment
+├── drizzle.config.ts             # Konfigurasi Drizzle ORM
+├── next.config.ts                # Konfigurasi Next.js
+├── package.json                  # Daftar dependencies & script
+├── postcss.config.mjs            # Konfigurasi PostCSS
+└── tsconfig.json                 # Konfigurasi TypeScript
 ```
 
 ---
 
-## 🗄️ Skema Database
+## 📜 Daftar Perintah (Scripts)
 
-Aplikasi ini memiliki 3 tabel utama:
-
-- **`users`** – Data akun pengguna (nama, email, password terenkripsi)
-- **`projects`** – Proyek milik pengguna (nama, deskripsi, warna label)
-- **`tasks`** – Tugas dalam proyek (judul, status, prioritas, tenggat waktu)
-
-**Status tugas yang tersedia:** `TO DO` | `IN_PROGRESS` | `DONE`
-
-**Prioritas tugas yang tersedia:** `LOW` | `MEDIUM` | `HIGH`
-
----
-
-## 📜 Daftar Script
-
-| Script | Perintah | Keterangan |
-|---|---|---|
-| Development | `npm run dev` | Jalankan server development |
-| Build | `npm run build` | Build untuk production |
-| Start | `npm run start` | Jalankan server production (setelah build) |
-| Lint | `npm run lint` | Periksa kualitas kode |
-| DB Generate | `npx drizzle-kit generate` | Generate file migrasi baru |
-| DB Migrate | `npx drizzle-kit migrate` | Terapkan migrasi ke database |
-| DB Studio | `npx drizzle-kit studio` | Buka Drizzle Studio (GUI database browser) |
+| Perintah | Deskripsi |
+| :--- | :--- |
+| `npm run dev` | Menjalankan local development server di `http://localhost:3000` |
+| `npm run build` | Melakukan compile dan build aplikasi untuk tahap produksi |
+| `npm run start` | Menjalankan server aplikasi production hasil build |
+| `npm run lint` | Menjalankan pengecekan ESLint untuk menjaga kualitas kode |
+| `npm run db:generate` | Membuat berkas migrasi SQL baru berdasarkan perubahan di `schema.ts` |
+| `npm run db:migrate` | Menerapkan migrasi tertunda ke database PostgreSQL |
+| `npm run db:push` | Mendorong perubahan skema langsung ke database (prototyping cepat) |
+| `npm run db:studio` | Membuka Drizzle Studio di browser untuk eksplorasi data |
 
 ---
 
 ## ❓ Troubleshooting
 
-**Koneksi database gagal?**
-- Pastikan PostgreSQL sedang berjalan (`pg_ctl status` atau cek di Windows Services)
-- Periksa kembali nilai `DATABASE_URL` di file `.env.local`
-- Pastikan database `taskflow` sudah dibuat
+<details>
+<summary><b>1. Error: Connection refused pada DATABASE_URL (PostgreSQL)</b></summary>
 
-**Error saat migrasi?**
-- Jalankan `npx drizzle-kit generate` terlebih dahulu sebelum `migrate`
-- Pastikan user PostgreSQL memiliki hak akses ke database
+- Pastikan service PostgreSQL sudah berjalan di komputer kamu.
+- Jika menggunakan Docker, periksa container aktif dengan `docker ps`.
+- Pastikan port `5432` belum diblokir oleh firewall atau digunakan oleh instance database lain.
+- Cek kembali username, password, dan port pada `DATABASE_URL` di file `.env.local`.
+</details>
 
-**Port 3000 sudah dipakai?**
-- Ganti port dengan `npm run dev -- -p 3001`
+<details>
+<summary><b>2. Error: Database "taskflow" does not exist</b></summary>
 
-**Module not found / dependency error?**
-- Hapus folder `node_modules` dan file `package-lock.json`, lalu jalankan ulang `npm install`
+Database belum dibuat di PostgreSQL. Buat terlebih dahulu dengan mengeksekusi:
+```sql
+CREATE DATABASE taskflow;
+```
+atau pastikan nama database di `DATABASE_URL` sesuai dengan database yang sudah ada.
+</details>
+
+<details>
+<summary><b>3. Port 3000 sudah digunakan (Port in use)</b></summary>
+
+Jalankan development server pada port alternatif (misal `3001`):
+```bash
+npm run dev -- -p 3001
+```
+</details>
+
+<details>
+<summary><b>4. Masalah cache / dependensi bermasalah</b></summary>
+
+Jika mengalami error modul tidak ditemukan setelah pembaruan branch:
+```bash
+# Windows (PowerShell)
+Remove-Item -Recurse -Force node_modules, .next
+npm install
+
+# Linux / macOS
+rm -rf node_modules .next
+npm install
+```
+</details>
+
+---
+
+## 📄 Lisensi
+
+Didistribusikan di bawah lisensi MIT. Lihat berkas `LICENSE` untuk informasi lebih lanjut.
