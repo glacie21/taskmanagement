@@ -1,112 +1,73 @@
-import Image from "next/image";
-import { ExternalLink, BookOpen, Layers } from "lucide-react";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { ChartColumn, FolderKanban, ListChecks } from "lucide-react";
+import { getSession } from "@/lib/auth/dal";
+import { Logo } from "@/components/logo";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { buttonClasses } from "@/components/ui/button";
 
-interface ActionLink {
-  label: string;
-  href: string;
-  primary?: boolean;
-}
-
-const ACTION_LINKS: ActionLink[] = [
+const FEATURES = [
   {
-    label: "Deploy Now",
-    href: "https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app",
-    primary: true,
+    icon: FolderKanban,
+    title: "Proyek berwarna",
+    description: "Kelompokkan tugas ke dalam proyek dan pantau progres masing-masing.",
   },
   {
-    label: "Documentation",
-    href: "https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app",
-    primary: false,
+    icon: ListChecks,
+    title: "Status & prioritas",
+    description: "Atur status, prioritas, dan tenggat agar tidak ada yang terlewat.",
+  },
+  {
+    icon: ChartColumn,
+    title: "Statistik visual",
+    description: "Lihat ringkasan produktivitasmu lewat grafik di dashboard.",
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  if (await getSession()) redirect("/dashboard");
+
   return (
-    <div className="relative min-h-screen w-full flex flex-col items-center justify-center p-6 sm:p-12 overflow-hidden bg-zinc-50 dark:bg-zinc-950 font-sans">
-      {/* Subtle Background Glow Accent */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+    <div className="relative flex min-h-screen flex-col overflow-hidden">
+      <div className="pointer-events-none absolute top-1/4 left-1/2 h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/10 blur-3xl dark:bg-indigo-500/20" />
 
-      {/* Main Glass Card */}
-      <main className="relative z-10 w-full max-w-2xl flex flex-col items-center sm:items-start gap-8 p-8 sm:p-12 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl shadow-xl shadow-zinc-200/40 dark:shadow-none">
-        {/* Next.js Logo */}
-        <div className="flex items-center gap-3">
-          <Image
-            className="dark:invert transition-transform hover:scale-105"
-            src="/next.svg"
-            alt="Next.js logo"
-            width={110}
-            height={22}
-            priority
-          />
+      <header className="relative mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-5 sm:px-6">
+        <Logo />
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <Link href="/login" className={buttonClasses("ghost", "sm")}>
+            Masuk
+          </Link>
+        </div>
+      </header>
+
+      <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-4 py-16 text-center sm:px-6">
+        <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-50">
+          Kelola proyek & tugas tanpa ribet
+        </h1>
+        <p className="mt-4 max-w-xl text-base text-zinc-600 sm:text-lg dark:text-zinc-400">
+          TaskFlow membantumu mencatat tugas, mengatur prioritas, dan memantau progres kerja dalam satu tempat.
+        </p>
+        <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <Link href="/register" className={buttonClasses("primary", "md", "h-11 px-6")}>
+            Mulai gratis
+          </Link>
+          <Link href="/login" className={buttonClasses("secondary", "md", "h-11 px-6")}>
+            Saya sudah punya akun
+          </Link>
         </div>
 
-        {/* Heading & Guide Info */}
-        <div className="flex flex-col items-center text-center sm:items-start sm:text-left gap-4">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 leading-snug">
-            To get started, edit{" "}
-            <code className="inline-block px-2.5 py-1 text-sm font-mono font-medium rounded-md bg-zinc-100 dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 border border-zinc-200 dark:border-zinc-700">
-              src/app/page.tsx
-            </code>
-          </h1>
-
-          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-lg">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 font-semibold text-zinc-900 dark:text-zinc-200 hover:text-indigo-600 dark:hover:text-indigo-400 underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-4 transition-colors"
+        <div className="mt-16 grid w-full gap-4 text-left sm:grid-cols-3">
+          {FEATURES.map(({ icon: Icon, title, description }) => (
+            <div
+              key={title}
+              className="rounded-xl border border-zinc-200 bg-white/70 p-5 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/60"
             >
-              <Layers className="w-3.5 h-3.5" />
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 font-semibold text-zinc-900 dark:text-zinc-200 hover:text-indigo-600 dark:hover:text-indigo-400 underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-4 transition-colors"
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto pt-2">
-          {ACTION_LINKS.map((link) =>
-            link.primary ? (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-              >
-                <Image
-                  className="dark:invert w-3.5 h-3.5"
-                  src="/vercel.svg"
-                  alt="Vercel logo"
-                  width={14}
-                  height={14}
-                />
-                {link.label}
-              </a>
-            ) : (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/80 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-              >
-                {link.label}
-                <ExternalLink className="w-3.5 h-3.5 opacity-60" />
-              </a>
-            )
-          )}
+              <Icon className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+              <h2 className="mt-3 font-semibold text-zinc-900 dark:text-zinc-100">{title}</h2>
+              <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{description}</p>
+            </div>
+          ))}
         </div>
       </main>
     </div>

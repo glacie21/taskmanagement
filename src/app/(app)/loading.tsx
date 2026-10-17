@@ -1,0 +1,14 @@
+export default function Loading() {
+  return (
+    <div className="animate-pulse" aria-busy="true" aria-label="Memuat">
+      <div className="mb-2 h-7 w-48 rounded-md bg-zinc-200 dark:bg-zinc-800" />
+      <div className="mb-8 h-4 w-72 rounded-md bg-zinc-200 dark:bg-zinc-800" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {Array.from({ length: 4 }, (_, i) => (
+          <div key={i} className="h-24 rounded-xl bg-zinc-200 dark:bg-zinc-800" />
+        ))}
+      </div>
+      <div className="mt-6 h-72 rounded-xl bg-zinc-200 dark:bg-zinc-800" />
+    </div>
+  );
+}

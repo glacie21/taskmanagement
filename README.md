@@ -107,7 +107,7 @@ copy .env.example .env.local
 Buka file `.env.local` lalu sesuaikan isinya:
 
 ```env
-# URL koneksi ke PostgreSQL
+# URL koneksi ke PostgreSQL (opsional — kosongkan untuk memakai PGlite, lihat langkah 4)
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/taskflow
 
 # Secret key untuk JWT / session (minimal 32 karakter)
@@ -124,6 +124,11 @@ JWT_SECRET=super_secret_jwt_key_silakan_ganti_dengan_string_acak
 ### 4. Siapkan Database PostgreSQL
 
 Pilih salah satu metode yang paling mudah bagi kamu:
+
+#### Opsi 0: Tanpa install apa pun (PGlite)
+Jika `DATABASE_URL` **tidak diisi**, aplikasi otomatis memakai [PGlite](https://pglite.dev) — PostgreSQL embedded yang disimpan di folder `.pglite/` (sudah di-`.gitignore`). Cocok untuk development lokal; langsung lanjut ke langkah 5.
+
+> ⚠️ PGlite hanya bisa dibuka oleh satu proses. Hentikan `npm run dev` sebelum menjalankan `db:migrate` / `db:push` / `db:studio`.
 
 #### Opsi A: Menggunakan Docker (Paling Praktis)
 Jika memiliki Docker, kamu bisa menjalankan PostgreSQL secara instan tanpa install database lokal:
@@ -222,13 +227,23 @@ Akses GUI database di: **[https://local.drizzle.team](https://local.drizzle.team
 taskmanagement/
 ├── src/
 │   ├── app/                      # Next.js App Router (Halaman & Layout)
-│   │   ├── layout.tsx            # Root layout & providers
-│   │   ├── page.tsx              # Halaman beranda utama
-│   │   └── globals.css           # Styling global & konfigurasi tema Tailwind
-│   └── lib/
-│       └── db/
-│           ├── schema.ts         # Definisi tabel & relasi database (Drizzle)
-│           └── migrations/       # Hasil generate file migrasi SQL
+│   │   ├── (auth)/               # /login & /register
+│   │   ├── (app)/                # Halaman terproteksi: /dashboard, /projects, /projects/[id], /tasks
+│   │   ├── actions/              # Server Actions (auth, projects, tasks)
+│   │   ├── api/auth/signout/     # Membersihkan cookie sesi yang sudah tidak valid
+│   │   ├── layout.tsx            # Root layout & providers (tema + toast)
+│   │   ├── page.tsx              # Landing page
+│   │   └── globals.css           # Styling global, dark mode & warna grafik
+│   ├── components/               # Komponen UI (ui/, dashboard/, projects/, tasks/, ...)
+│   ├── lib/
+│   │   ├── auth/                 # Sesi JWT (session.ts) & Data Access Layer (dal.ts)
+│   │   ├── data/                 # Query database per fitur
+│   │   ├── db/
+│   │   │   ├── index.ts          # Koneksi DB (PostgreSQL atau PGlite)
+│   │   │   ├── schema.ts         # Definisi tabel & relasi database (Drizzle)
+│   │   │   └── migrations/       # Hasil generate file migrasi SQL
+│   │   └── validations.ts        # Skema Zod (dipakai form & server)
+│   └── proxy.ts                  # Proteksi route (pengganti middleware di Next.js 16)
 ├── public/                       # Aset statis publik (ikon, gambar)
 ├── .env.example                  # Template konfigurasi environment
 ├── drizzle.config.ts             # Konfigurasi Drizzle ORM
