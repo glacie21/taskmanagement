@@ -263,6 +263,7 @@ taskmanagement/
 | `npm run build` | Melakukan compile dan build aplikasi untuk tahap produksi |
 | `npm run start` | Menjalankan server aplikasi production hasil build |
 | `npm run lint` | Menjalankan pengecekan ESLint untuk menjaga kualitas kode |
+| `npm test` | Menjalankan unit test (Vitest) dalam mode watch; `npm test -- --run` untuk sekali jalan |
 | `npm run db:generate` | Membuat berkas migrasi SQL baru berdasarkan perubahan di `schema.ts` |
 | `npm run db:migrate` | Menerapkan migrasi tertunda ke database PostgreSQL |
 | `npm run db:push` | Mendorong perubahan skema langsung ke database (prototyping cepat) |

@@ -15,7 +15,8 @@ export async function proxy(request: NextRequest) {
 
   if (!session && matches(path, protectedRoutes)) {
     const url = new URL('/login', request.nextUrl);
-    url.searchParams.set('from', path);
+    // Sertakan query string agar filter (?status=...) tetap ada setelah login
+    url.searchParams.set('from', path + request.nextUrl.search);
     return NextResponse.redirect(url);
   }
 

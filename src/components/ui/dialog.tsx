@@ -21,6 +21,7 @@ export function Dialog({
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const pointerDownOnBackdrop = useRef(false);
   const titleId = useId();
 
   useEffect(() => {
@@ -34,8 +35,10 @@ export function Dialog({
     <dialog
       ref={ref}
       onClose={onClose}
-      // Klik di backdrop menutup dialog
-      onClick={(e) => e.target === ref.current && onClose()}
+      // Klik di backdrop menutup dialog. Tekanan mouse harus dimulai di backdrop juga, supaya
+      // memblok teks di input lalu melepas mouse di luar dialog tidak ikut menutupnya.
+      onPointerDown={(e) => (pointerDownOnBackdrop.current = e.target === ref.current)}
+      onClick={(e) => pointerDownOnBackdrop.current && e.target === ref.current && onClose()}
       aria-labelledby={titleId}
       className={cn(
         'm-auto w-[calc(100%-2rem)] max-w-lg rounded-xl border border-zinc-200 bg-white p-0 text-zinc-900 shadow-2xl',

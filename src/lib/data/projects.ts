@@ -1,4 +1,5 @@
 import 'server-only';
+import { cache } from 'react';
 import { and, asc, count, eq, sql } from 'drizzle-orm';
 import { db } from '@/lib/db';
 import { projects, tasks } from '@/lib/db/schema';
@@ -34,11 +35,12 @@ export async function getProjectOptions(userId: string) {
 
 export type ProjectOption = Awaited<ReturnType<typeof getProjectOptions>>[number];
 
-export async function getProject(userId: string, projectId: string) {
+// cache: generateMetadata dan halaman detail memanggil ini dengan argumen yang sama dalam satu request
+export const getProject = cache(async (userId: string, projectId: string) => {
   const [project] = await db
     .select()
     .from(projects)
     .where(and(eq(projects.id, projectId), eq(projects.userId, userId)))
     .limit(1);
   return project ?? null;
-}
+});

@@ -1,4 +1,4 @@
-import { pgTable, text, varchar, timestamp } from 'drizzle-orm/pg-core';
+import { index, pgTable, text, varchar, timestamp } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 export const TASK_STATUSES = ['TODO', 'IN_PROGRESS', 'DONE'] as const;
@@ -38,7 +38,10 @@ export const projects = pgTable('projects', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   ...timestamps,
-});
+}, (t) => [
+  // Postgres tidak otomatis membuat index untuk foreign key; semua query proyek difilter per user
+  index('projects_user_id_idx').on(t.userId),
+]);
 
 export const tasks = pgTable('tasks', {
   id: id(),
@@ -53,7 +56,11 @@ export const tasks = pgTable('tasks', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   ...timestamps,
-});
+}, (t) => [
+  index('tasks_user_id_idx').on(t.userId),
+  // Dipakai filter per proyek dan saat proyek dihapus (ON DELETE CASCADE)
+  index('tasks_project_id_idx').on(t.projectId),
+]);
 
 // Relationships
 export const usersRelations = relations(users, ({ many }) => ({

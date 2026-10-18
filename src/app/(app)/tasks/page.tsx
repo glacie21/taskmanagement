@@ -18,13 +18,15 @@ export default async function TasksPage({ searchParams }: PageProps<'/tasks'>) {
   const hasFilters = Object.values(filters).some(Boolean);
 
   const [tasks, projects] = await Promise.all([getTasks(user.id, filters), getProjectOptions(user.id)]);
+  // ?project= dari URL hanya dipakai sebagai default form jika proyeknya memang milik user
+  const defaultProjectId = projects.some((p) => p.id === filters.projectId) ? filters.projectId : undefined;
 
   return (
     <>
       <PageHeader
         title="Tugas"
         description={`${tasks.length} tugas${hasFilters ? ' (terfilter)' : ''}`}
-        action={<NewTaskButton projects={projects} defaultProjectId={filters.projectId} />}
+        action={<NewTaskButton projects={projects} defaultProjectId={defaultProjectId} />}
       />
 
       <div className="mb-4">
