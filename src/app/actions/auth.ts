@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { db } from '@/lib/db';
 import { users } from '@/lib/db/schema';
 import { createSession, deleteSession } from '@/lib/auth/session';
+import { safeRedirectPath } from '@/lib/utils';
 import { loginSchema, signupSchema, type ActionResult } from '@/lib/validations';
 
 export async function signup(input: unknown): Promise<ActionResult> {
@@ -17,19 +18,17 @@ export async function signup(input: unknown): Promise<ActionResult> {
 
   const { name, email, password } = parsed.data;
 
-  const [existing] = await db
-    .select({ id: users.id })
-    .from(users)
-    .where(eq(users.email, email))
-    .limit(1);
-  if (existing) {
-    return { ok: false, fieldErrors: { email: ['Email sudah terdaftar'] } };
-  }
-
+  // Constraint UNIQUE di kolom email yang memutuskan, jadi dua pendaftaran bersamaan
+  // dengan email yang sama tidak bisa sama-sama lolos (dan tidak melempar error).
   const [user] = await db
     .insert(users)
     .values({ name, email, password: await bcrypt.hash(password, 10) })
+    .onConflictDoNothing({ target: users.email })
     .returning({ id: users.id });
+
+  if (!user) {
+    return { ok: false, fieldErrors: { email: ['Email sudah terdaftar'] } };
+  }
 
   await createSession(user.id);
   redirect('/dashboard');
@@ -54,9 +53,7 @@ export async function login(input: unknown, redirectTo?: string): Promise<Action
   }
 
   await createSession(user.id);
-  // Hanya izinkan path internal agar tidak bisa dipakai untuk open redirect
-  const safeRedirect = redirectTo && /^\/(?![/\\])/.test(redirectTo) ? redirectTo : '/dashboard';
-  redirect(safeRedirect);
+  redirect(safeRedirectPath(redirectTo));
 }
 
 export async function logout() {

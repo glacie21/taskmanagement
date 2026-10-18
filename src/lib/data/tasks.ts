@@ -1,5 +1,5 @@
 import 'server-only';
-import { and, asc, desc, eq, ilike, sql, type SQL } from 'drizzle-orm';
+import { and, asc, desc, eq, ilike, ne, sql, type SQL } from 'drizzle-orm';
 import { db } from '@/lib/db';
 import {
   TASK_PRIORITIES,
@@ -41,6 +41,15 @@ export async function getTasks(userId: string, filters: TaskFilters = {}) {
     conditions.push(ilike(tasks.title, `%${escaped}%`));
   }
 
+  return selectTasks(conditions);
+}
+
+/** Tugas belum selesai dengan tenggat terdekat (untuk dashboard) */
+export async function getUpcomingTasks(userId: string, limit = 5) {
+  return selectTasks([eq(tasks.userId, userId), ne(tasks.status, 'DONE')]).limit(limit);
+}
+
+function selectTasks(conditions: SQL[]) {
   return db
     .select({
       id: tasks.id,

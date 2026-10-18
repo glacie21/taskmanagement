@@ -3,8 +3,7 @@ import Link from 'next/link';
 import { CircleCheck, CircleDot, FolderKanban, ListTodo, TriangleAlert } from 'lucide-react';
 import { requireUser } from '@/lib/auth/dal';
 import { getDashboardData } from '@/lib/data/dashboard';
-import { getProjectOptions } from '@/lib/data/projects';
-import { getTasks } from '@/lib/data/tasks';
+import { getUpcomingTasks } from '@/lib/data/tasks';
 import { PageHeader } from '@/components/page-header';
 import { Card, CardHeader, EmptyState } from '@/components/ui/card';
 import { StatTile } from '@/components/dashboard/stat-tile';
@@ -18,14 +17,8 @@ export const metadata: Metadata = { title: 'Dashboard' };
 
 export default async function DashboardPage() {
   const user = await requireUser();
-  const [stats, projects, openTasks] = await Promise.all([
-    getDashboardData(user.id),
-    getProjectOptions(user.id),
-    getTasks(user.id),
-  ]);
-
-  // getTasks sudah mengurutkan: belum selesai dulu, tenggat terdekat dulu
-  const upcoming = openTasks.filter((task) => task.status !== 'DONE').slice(0, 5);
+  const [stats, upcoming] = await Promise.all([getDashboardData(user.id), getUpcomingTasks(user.id)]);
+  const { projects } = stats;
   const firstName = user.name.split(' ')[0];
 
   return (

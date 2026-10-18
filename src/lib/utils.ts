@@ -24,6 +24,11 @@ export function formatDate(date: Date) {
   });
 }
 
+/** Hanya izinkan path internal agar parameter redirect tidak bisa dipakai untuk open redirect */
+export function safeRedirectPath(path: string | undefined, fallback = '/dashboard') {
+  return path && /^\/(?![/\\])/.test(path) ? path : fallback;
+}
+
 export function startOfTodayUTC() {
   const now = new Date();
   return new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
