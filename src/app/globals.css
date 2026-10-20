@@ -1,8 +1,33 @@
 @import "tailwindcss";
 
+/* Dark mode dikontrol oleh next-themes lewat class .dark di <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafafa;
+  --foreground: #18181b;
+
+  /* Grafik: status = ramp biru berurutan (TODO → Dikerjakan → Selesai) */
+  --chart-status-todo: #86b6ef;
+  --chart-status-progress: #2a78d6;
+  --chart-status-done: #104281;
+  --chart-priority: #eb6834;
+  --chart-surface: #ffffff;
+  --chart-grid: #e1e0d9;
+  --chart-axis: #898781;
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #f4f4f5;
+
+  --chart-status-todo: #184f95;
+  --chart-status-progress: #3987e5;
+  --chart-status-done: #9ec5f4;
+  --chart-priority: #d95926;
+  --chart-surface: #18181b;
+  --chart-grid: #2c2c2a;
+  --chart-axis: #898781;
 }
 
 @theme inline {
@@ -12,15 +37,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(2px);
 }
