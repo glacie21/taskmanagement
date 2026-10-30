@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { TASK_STATUSES, projects, tasks } from '@/lib/db/schema';
 import { requireUser } from '@/lib/auth/dal';
+import { runAction } from '@/lib/safe-action';
 import { fromDateInputValue } from '@/lib/utils';
 import { taskSchema, type ActionResult, type TaskInput } from '@/lib/validations';
 
@@ -47,59 +48,67 @@ async function parseTask(userId: string, input: unknown): Promise<ParsedTask> {
 }
 
 export async function createTask(input: unknown): Promise<ActionResult> {
-  const user = await requireUser();
-  const parsed = await parseTask(user.id, input);
-  if (!parsed.ok) return parsed.result;
+  return runAction(async () => {
+    const user = await requireUser();
+    const parsed = await parseTask(user.id, input);
+    if (!parsed.ok) return parsed.result;
 
-  await db.insert(tasks).values({ ...parsed.values, userId: user.id });
+    await db.insert(tasks).values({ ...parsed.values, userId: user.id });
 
-  revalidatePath('/', 'layout');
-  return { ok: true };
+    revalidatePath('/', 'layout');
+    return { ok: true };
+  });
 }
 
 export async function updateTask(taskId: string, input: unknown): Promise<ActionResult> {
-  const user = await requireUser();
-  const parsed = await parseTask(user.id, input);
-  if (!parsed.ok) return parsed.result;
+  return runAction(async () => {
+    const user = await requireUser();
+    const parsed = await parseTask(user.id, input);
+    if (!parsed.ok) return parsed.result;
 
-  const updated = await db
-    .update(tasks)
-    .set(parsed.values)
-    .where(and(eq(tasks.id, taskId), eq(tasks.userId, user.id)))
-    .returning({ id: tasks.id });
+    const updated = await db
+      .update(tasks)
+      .set(parsed.values)
+      .where(and(eq(tasks.id, taskId), eq(tasks.userId, user.id)))
+      .returning({ id: tasks.id });
 
-  if (updated.length === 0) return { ok: false, error: 'Tugas tidak ditemukan' };
+    if (updated.length === 0) return { ok: false, error: 'Tugas tidak ditemukan' };
 
-  revalidatePath('/', 'layout');
-  return { ok: true };
+    revalidatePath('/', 'layout');
+    return { ok: true };
+  });
 }
 
 export async function updateTaskStatus(taskId: string, status: unknown): Promise<ActionResult> {
-  const user = await requireUser();
-  const parsed = z.enum(TASK_STATUSES).safeParse(status);
-  if (!parsed.success) return { ok: false, error: 'Status tidak valid' };
+  return runAction(async () => {
+    const user = await requireUser();
+    const parsed = z.enum(TASK_STATUSES).safeParse(status);
+    if (!parsed.success) return { ok: false, error: 'Status tidak valid' };
 
-  const updated = await db
-    .update(tasks)
-    .set({ status: parsed.data })
-    .where(and(eq(tasks.id, taskId), eq(tasks.userId, user.id)))
-    .returning({ id: tasks.id });
+    const updated = await db
+      .update(tasks)
+      .set({ status: parsed.data })
+      .where(and(eq(tasks.id, taskId), eq(tasks.userId, user.id)))
+      .returning({ id: tasks.id });
 
-  if (updated.length === 0) return { ok: false, error: 'Tugas tidak ditemukan' };
+    if (updated.length === 0) return { ok: false, error: 'Tugas tidak ditemukan' };
 
-  revalidatePath('/', 'layout');
-  return { ok: true };
+    revalidatePath('/', 'layout');
+    return { ok: true };
+  });
 }
 
 export async function deleteTask(taskId: string): Promise<ActionResult> {
-  const user = await requireUser();
-  const deleted = await db
-    .delete(tasks)
-    .where(and(eq(tasks.id, taskId), eq(tasks.userId, user.id)))
-    .returning({ id: tasks.id });
+  return runAction(async () => {
+    const user = await requireUser();
+    const deleted = await db
+      .delete(tasks)
+      .where(and(eq(tasks.id, taskId), eq(tasks.userId, user.id)))
+      .returning({ id: tasks.id });
 
-  if (deleted.length === 0) return { ok: false, error: 'Tugas tidak ditemukan' };
+    if (deleted.length === 0) return { ok: false, error: 'Tugas tidak ditemukan' };
 
-  revalidatePath('/', 'layout');
-  return { ok: true };
+    revalidatePath('/', 'layout');
+    return { ok: true };
+  });
 }

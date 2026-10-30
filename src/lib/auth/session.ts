@@ -10,10 +10,20 @@ export type SessionPayload = {
   expiresAt: string;
 };
 
+// Nilai contoh yang dulu ada di .env.example / README. Siapa pun bisa membacanya,
+// jadi jangan sampai terpakai walaupun panjangnya lolos.
+const PLACEHOLDER_SECRETS = [
+  'your_super_secret_jwt_key_change_me_in_production',
+  'super_secret_jwt_key_silakan_ganti_dengan_string_acak',
+];
+
 function getKey() {
   const secret = process.env.JWT_SECRET;
-  if (!secret || secret.length < 32) {
-    throw new Error('JWT_SECRET belum diatur atau kurang dari 32 karakter. Lihat .env.example.');
+  if (!secret || secret.length < 32 || PLACEHOLDER_SECRETS.includes(secret)) {
+    throw new Error(
+      'JWT_SECRET belum diatur, kurang dari 32 karakter, atau masih nilai contoh. ' +
+        'Buat dengan `openssl rand -base64 32`, lihat .env.example.',
+    );
   }
   return new TextEncoder().encode(secret);
 }
@@ -28,8 +38,10 @@ export async function encrypt(payload: SessionPayload) {
 
 export async function decrypt(token: string | undefined): Promise<SessionPayload | null> {
   if (!token) return null;
+  // Di luar try: konfigurasi yang salah harus gagal dengan jelas, bukan dianggap "belum login"
+  const key = getKey();
   try {
-    const { payload } = await jwtVerify<SessionPayload>(token, getKey(), {
+    const { payload } = await jwtVerify<SessionPayload>(token, key, {
       algorithms: ['HS256'],
     });
     return payload;

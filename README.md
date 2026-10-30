@@ -110,13 +110,17 @@ Buka file `.env.local` lalu sesuaikan isinya:
 # URL koneksi ke PostgreSQL (opsional — kosongkan untuk memakai PGlite, lihat langkah 4)
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/taskflow
 
-# Secret key untuk JWT / session (minimal 32 karakter)
-JWT_SECRET=super_secret_jwt_key_silakan_ganti_dengan_string_acak
+# Secret key untuk JWT / session (wajib, minimal 32 karakter)
+JWT_SECRET=<hasil openssl rand -base64 32>
 ```
 
-> 💡 **Tips:** Untuk membuat string acak yang aman untuk `JWT_SECRET`, jalankan:
+> 💡 **Tips:** `JWT_SECRET` wajib diisi sendiri, aplikasi menolak nilai kosong atau nilai contoh. Untuk membuat string acak yang aman, jalankan:
 > ```bash
 > openssl rand -base64 32
+> ```
+> Tanpa `openssl` (misalnya di Windows), pakai Node:
+> ```bash
+> node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 > ```
 
 ---
